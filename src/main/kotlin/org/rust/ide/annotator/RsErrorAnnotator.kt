@@ -67,6 +67,7 @@ class RsErrorAnnotator : AnnotatorBase(), HighlightRangeExtension {
             override fun visitImplItem(o: RsImplItem) = checkImpl(rsHolder, o)
             override fun visitLabel(o: RsLabel) = checkLabel(rsHolder, o)
             override fun visitLifetime(o: RsLifetime) = checkLifetime(rsHolder, o)
+            override fun visitMatchArmGuard(o: RsMatchArmGuard) = checkMatchArmGuard(rsHolder, o)
             override fun visitModDeclItem(o: RsModDeclItem) = checkModDecl(rsHolder, o)
             override fun visitModItem(o: RsModItem) = checkDuplicates(rsHolder, o)
             override fun visitUseSpeck(o: RsUseSpeck) = checkUseSpeck(rsHolder, o)
@@ -686,6 +687,12 @@ class RsErrorAnnotator : AnnotatorBase(), HighlightRangeExtension {
                 RsDiagnostic.InBandAndExplicitLifetimesError(lifetime).addToHolder(holder)
             else ->
                 RsDiagnostic.UndeclaredLifetimeError(lifetime).addToHolder(holder)
+        }
+    }
+
+    private fun checkMatchArmGuard(holder: RsAnnotationHolder, guard: RsMatchArmGuard) {
+        if (guard.let != null) {
+            IF_LET_GUARD.check(holder, guard, "if let guard")
         }
     }
 
