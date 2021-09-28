@@ -3031,6 +3031,16 @@ class RsErrorAnnotatorTest : RsAnnotatorTestBase(RsErrorAnnotator::class) {
         }
     """)
 
+    @MockRustcVersion("1.32.0")
+    fun `test irrefutable if let guard`() = checkErrors("""
+        fn main() {
+            match 1 {
+                1 <error descr="if let guard is experimental [E0658]">if let <error descr="irrefutable let pattern is experimental [E0658]">x</error> = Some(42)</error> => 1,
+                _ => 2
+            };
+        }
+    """)
+
     @MockRustcVersion("1.0.0-nightly")
     fun `test stable attr on invalid owner E0132`() = checkErrors("""
         #![feature(start)]

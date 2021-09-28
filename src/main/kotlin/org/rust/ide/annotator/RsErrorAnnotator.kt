@@ -694,6 +694,11 @@ class RsErrorAnnotator : AnnotatorBase(), HighlightRangeExtension {
         if (guard.let != null) {
             IF_LET_GUARD.check(holder, guard, "if let guard")
         }
+
+        val pat = guard.pat
+        if (pat != null && pat.isIrrefutable) {
+            IRREFUTABLE_LET_PATTERNS.check(holder, pat, "irrefutable let pattern")
+        }
     }
 
     private fun checkModDecl(holder: RsAnnotationHolder, modDecl: RsModDeclItem) {
