@@ -18,10 +18,8 @@ import org.rust.lang.core.crate.Crate
 import org.rust.lang.core.macros.MacroCallBody
 import org.rust.lang.core.macros.RangeMap
 import org.rust.lang.core.psi.RsFile
-import org.rust.lang.core.psi.ext.RsItemElement
-import org.rust.lang.core.psi.ext.RsMod
-import org.rust.lang.core.psi.ext.isEnabledByCfgSelf
-import org.rust.lang.core.psi.ext.variants
+import org.rust.lang.core.psi.RsModItem
+import org.rust.lang.core.psi.ext.*
 import org.rust.lang.core.resolve.namespaces
 import org.rust.lang.core.resolve.processModDeclResolveVariants
 import org.rust.lang.core.resolve2.util.DollarCrateHelper
@@ -61,6 +59,16 @@ fun collectFileAndCalculateHash(
     val fileHash = hashCalculator.getFileHash()
     context.defMap.addVisitedFile(file, modData, fileHash)
     return collector.legacyMacros
+}
+
+fun collectDetachedMod(mod: RsMod, modData: ModData, context: ModCollectorContext) {
+    val collector = ModCollector(modData, context, modData.macroIndex, hashCalculator = null, dollarCrateHelper = null)
+    val stub = when (mod) {
+        is RsModItem -> mod.greenStub
+        is RsFile -> mod.getOrBuildStub()
+        else -> null
+    } ?: return
+    collector.collectMod(stub)
 }
 
 fun collectExpandedElements(
@@ -199,7 +207,7 @@ private class ModCollector(
             modData.addLegacyMacros(childModLegacyMacros)
             legacyMacros += childModLegacyMacros
         }
-        if (childModData.isRsFile && childModData.hasPathAttributeRelativeToParentFile) {
+        if (childModData.isRsFile && childModData.hasPathAttributeRelativeToParentFile && childModData.fileId != null) {
             modData.recordChildFileInUnusualLocation(childModData.fileId)
         }
         return childModData
@@ -451,6 +459,7 @@ private class ModCollector(
 }
 
 fun RsFile.getOrBuildStub(): RsFileStub? {
+    val virtualFile = viewProvider.virtualFile
     val stubTree = greenStubTree ?: StubTreeLoader.getInstance().readOrBuild(project, virtualFile, this)
     val stub = stubTree?.root as? RsFileStub
     if (stub == null) RESOLVE_LOG.error("No stub for file ${virtualFile.path}")
@@ -486,7 +495,7 @@ private fun ModData.getOwnedDirectory(): VirtualFile? {
 
 private fun ModData.asVirtualFile(): VirtualFile? {
     check(isRsFile)
-    return PersistentFS.getInstance().findFileById(fileId)
+    return PersistentFS.getInstance().findFileById(fileId ?: return null)
         ?: run {
             RESOLVE_LOG.error("Can't find VirtualFile for $this")
             return null

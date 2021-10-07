@@ -363,7 +363,7 @@ class DefCollector(
 
     private fun expandIncludeMacroCall(call: MacroCallInfo) {
         val modData = call.containingMod
-        val containingFile = PersistentFS.getInstance().findFileById(modData.fileId) ?: return
+        val containingFile = PersistentFS.getInstance().findFileById(modData.fileId ?: return) ?: return
         val includePath = (call.body as? MacroCallBody.FunctionLike)?.text ?: return
         val parentDirectory = containingFile.parent
         val includingFile = parentDirectory.findFileByMaybeRelativePath(includePath)
