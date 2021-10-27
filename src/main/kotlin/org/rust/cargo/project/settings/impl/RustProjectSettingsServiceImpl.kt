@@ -56,6 +56,7 @@ class RustProjectSettingsServiceImpl(
     override val explicitPathToStdlib: String? get() = _state.explicitPathToStdlib
     override val externalLinter: ExternalLinter get() = _state.externalLinter
     override val runExternalLinterOnTheFly: Boolean get() = _state.runExternalLinterOnTheFly
+    override val externalLinterOnTheFlyMaxDuration: Int get() = _state.externalLinterOnTheFlyMaxDuration
     override val externalLinterArguments: String get() = _state.externalLinterArguments
     override val compileAllTargets: Boolean get() = _state.compileAllTargets
     override val useOffline: Boolean get() = _state.useOffline

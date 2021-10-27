@@ -989,6 +989,9 @@
         <projectService serviceInterface="org.rust.lang.core.crate.CrateGraphService"
                         serviceImplementation="org.rust.lang.core.crate.impl.CrateGraphServiceImpl"/>
 
+        <projectService serviceInterface="org.rust.ide.annotator.RsLongExternalLinterRunNotifier"
+                        serviceImplementation="org.rust.ide.annotator.RsLongExternalLinterRunNotifierImpl"/>
+
         <toolWindow id="Cargo"
                     anchor="right"
                     factoryClass="org.rust.cargo.project.toolwindow.CargoToolWindowFactory"

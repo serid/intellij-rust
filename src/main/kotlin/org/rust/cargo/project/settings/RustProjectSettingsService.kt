@@ -17,6 +17,7 @@ import org.rust.cargo.toolchain.ExternalLinter
 import org.rust.cargo.toolchain.RsToolchain
 import org.rust.cargo.toolchain.RsToolchainBase
 import org.rust.cargo.toolchain.RsToolchainProvider
+import org.rust.ide.annotator.RsLongExternalLinterRunNotifier
 import org.rust.ide.experiments.RsExperiments
 import org.rust.openapiext.isFeatureEnabled
 import org.rust.openapiext.isUnitTestMode
@@ -42,6 +43,7 @@ interface RustProjectSettingsService {
         var externalLinter: ExternalLinter = ExternalLinter.DEFAULT,
         @AffectsHighlighting
         var runExternalLinterOnTheFly: Boolean = false,
+        var externalLinterOnTheFlyMaxDuration: Int = RsLongExternalLinterRunNotifier.DEFAULT_MAX_DURATION,
         @AffectsHighlighting
         var externalLinterArguments: String = "",
         @AffectsHighlighting
@@ -102,6 +104,7 @@ interface RustProjectSettingsService {
     val autoUpdateEnabled: Boolean
     val externalLinter: ExternalLinter
     val runExternalLinterOnTheFly: Boolean
+    val externalLinterOnTheFlyMaxDuration: Int
     val externalLinterArguments: String
     val compileAllTargets: Boolean
     val useOffline: Boolean

@@ -14,6 +14,7 @@ import org.rust.cargo.project.settings.impl.RustProjectSettingsServiceImpl
 import org.rust.cargo.project.settings.impl.XML_FORMAT_VERSION
 import org.rust.cargo.toolchain.ExternalLinter
 import org.rust.cargo.toolchain.RsLocalToolchain
+import org.rust.ide.annotator.RsLongExternalLinterRunNotifier.Companion.DEFAULT_MAX_DURATION
 import org.rust.openapiext.elementFromXmlString
 import org.rust.openapiext.toXmlString
 import java.nio.file.Paths
@@ -34,7 +35,8 @@ class RustProjectSettingsServiceTest : LightPlatformTestCase() {
               <option name="externalLinter" value="Clippy" />
               <option name="externalLinterArguments" value="--no-default-features" />
               <option name="macroExpansionEngine" value="DISABLED" />
-              <option name="runExternalLinterOnTheFly" value="true" />
+              <option name="runExternalLinterOnTheFly" value="false" />
+              <option name="externalLinterOnTheFlyMaxDuration" value="9999" />
               <option name="runRustfmtOnSave" value="true" />
               <option name="toolchainHomeDirectory" value="/" />
               <option name="useOffline" value="true" />
@@ -53,6 +55,7 @@ class RustProjectSettingsServiceTest : LightPlatformTestCase() {
         assertEquals(ExternalLinter.CLIPPY, service.externalLinter)
         assertEquals("/stdlib", service.explicitPathToStdlib)
         assertEquals(true, service.runExternalLinterOnTheFly)
+        assertEquals(9999, service.externalLinterOnTheFlyMaxDuration)
         assertEquals("--no-default-features", service.externalLinterArguments)
         assertEquals(false, service.compileAllTargets)
         assertEquals(true, service.useOffline)
@@ -81,14 +84,16 @@ class RustProjectSettingsServiceTest : LightPlatformTestCase() {
             <RustProjectSettings>
               <option name="compileAllTargets" value="false" />
               <option name="macroExpansionEngine" value="DISABLED" />
-              <option name="runExternalLinterOnTheFly" value="true" />
+              <option name="runExternalLinterOnTheFly" value="false" />
+              <option name="externalLinterOnTheFlyMaxDuration" value="9999" />
               <option name="version" value="2" />
             </RustProjectSettings>
         """.trimIndent()
         val actual = service.state.toXmlString()
         assertEquals(expected, actual)
 
-        assertEquals(true, service.runExternalLinterOnTheFly)
+        assertEquals(false, service.runExternalLinterOnTheFly)
+        assertEquals(9999, service.externalLinterOnTheFlyMaxDuration)
         assertEquals("", service.externalLinterArguments)
         assertEquals(MacroExpansionEngine.DISABLED, service.macroExpansionEngine)
     }

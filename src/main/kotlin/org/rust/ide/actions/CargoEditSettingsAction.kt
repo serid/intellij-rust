@@ -10,7 +10,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.DumbAware
 
-class CargoEditSettingsAction : AnAction(), DumbAware {
+class CargoEditSettingsAction(text: String) : AnAction(text), DumbAware {
 
     override fun update(e: AnActionEvent) {
         super.update(e)
