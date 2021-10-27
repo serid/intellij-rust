@@ -42,7 +42,7 @@ interface RustProjectSettingsService {
         @AffectsHighlighting
         var externalLinter: ExternalLinter = ExternalLinter.DEFAULT,
         @AffectsHighlighting
-        var runExternalLinterOnTheFly: Boolean = false,
+        var runExternalLinterOnTheFly: Boolean = true,
         var externalLinterOnTheFlyMaxDuration: Int = RsLongExternalLinterRunNotifier.DEFAULT_MAX_DURATION,
         @AffectsHighlighting
         var externalLinterArguments: String = "",
