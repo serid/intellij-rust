@@ -23,7 +23,6 @@ import org.rust.lang.utils.RsDiagnostic
 import org.rust.lang.utils.snapshot.CombinedSnapshot
 import org.rust.lang.utils.snapshot.Snapshot
 import org.rust.openapiext.Testmark
-import org.rust.openapiext.isUnitTestMode
 import org.rust.openapiext.recursionGuard
 import org.rust.stdext.zipValues
 
@@ -638,7 +637,7 @@ class RsInferenceContext(
      * Similar to [fullyResolve], but replaces unresolved [TyInfer.TyVar] to its [TyInfer.TyVar.origin]
      * instead of [TyUnknown]
      */
-    private fun <T : TypeFoldable<T>> fullyResolveWithOrigins(value: T): T {
+    fun <T : TypeFoldable<T>> fullyResolveWithOrigins(value: T): T {
         return value.foldWith(fullTypeWithOriginsResolver)
     }
 
@@ -925,7 +924,7 @@ class RsInferenceContext(
             typeParameters
         }
         is TraitImplSource.Trait -> {
-            if (isUnitTestMode) error("unreachable")
+            // It's possible in type-qualified UFCS paths (like `<A as Trait>::Type`) during completion
             emptySubstitution
         }
     }
