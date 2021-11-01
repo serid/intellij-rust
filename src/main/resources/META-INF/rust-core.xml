@@ -994,6 +994,8 @@
         <projectService serviceInterface="org.rust.lang.core.crate.CrateGraphService"
                         serviceImplementation="org.rust.lang.core.crate.impl.CrateGraphServiceImpl"/>
 
+        <projectService serviceImplementation="org.rust.ide.status.RsExternalLinterTooltipService"/>
+
         <projectService serviceInterface="org.rust.ide.annotator.RsLongExternalLinterRunNotifier"
                         serviceImplementation="org.rust.ide.annotator.RsLongExternalLinterRunNotifierImpl"/>
 
@@ -1001,6 +1003,10 @@
                     anchor="right"
                     factoryClass="org.rust.cargo.project.toolwindow.CargoToolWindowFactory"
                     icon="/icons/tool-window.svg"/>
+
+        <statusBarWidgetFactory id="rustExternalLinterWidget"
+                                implementation="org.rust.ide.status.RsExternalLinterWidgetFactory"
+                                order="after codeStyleWidget, before notificationsWidget"/>
 
         <additionalLibraryRootsProvider
                 implementation="org.rust.cargo.project.workspace.RsAdditionalLibraryRootsProvider"/>

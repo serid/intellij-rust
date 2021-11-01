@@ -107,15 +107,16 @@ object RsExternalLinterUtils {
             if (isUnitTestMode) {
                 EmptyProgressIndicator()
             } else {
-                BackgroundableProcessIndicator(
-                    project,
-                    "Analyzing project with External Linter",
-                    PerformInBackgroundOption.ALWAYS_BACKGROUND,
-                    CommonBundle.getCancelButtonText(),
-                    @Suppress("DialogTitleCapitalization")
-                    CommonBundle.getCancelButtonText(),
-                    true
-                )
+                EmptyProgressIndicator()
+//                BackgroundableProcessIndicator(
+//                    project,
+//                    "Analyzing project with External Linter",
+//                    PerformInBackgroundOption.ALWAYS_BACKGROUND,
+//                    CommonBundle.getCancelButtonText(),
+//                    @Suppress("DialogTitleCapitalization")
+//                    CommonBundle.getCancelButtonText(),
+//                    true
+//                )
             }
         }
         return ProgressManager.getInstance().runProcess(

@@ -34,7 +34,7 @@ class RsLongExternalLinterRunNotifierImpl(val project: Project) : RsLongExternal
         if (prevDurations.size == MAX_QUEUE_SIZE && minPrevDuration > maxDuration) {
             project.showBalloon(
                 "Low Performance due External Linter",
-                "The IDE is running external linter on-the-fly and this might affect performance. " +
+                "The IDE is running external linter on the fly and this might affect performance. " +
                     "Please consider disabling or increasing the maximum duration of the external linter run.",
                 NotificationType.WARNING,
                 CargoEditSettingsAction("Configure")
