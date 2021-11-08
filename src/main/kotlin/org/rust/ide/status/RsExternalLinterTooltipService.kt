@@ -27,7 +27,7 @@ class RsExternalLinterTooltipService(private val project: Project) : Disposable 
         enableTooltip.hidePopup()
         val tooltip = if (turnedOn) disableTooltip else enableTooltip
         tooltip.show(component) { _, _ ->
-            Point(component.width, component.height)
+            Point(component.width, 0)
         }
     }
 
@@ -38,7 +38,7 @@ class RsExternalLinterTooltipService(private val project: Project) : Disposable 
         val text = "The analysis shows all problems reported by ${linter.title}, but consumes more system resources. " +
             "When turned off, only the limited set of problems supported by IntelliJ Rust engine are shown."
         return GotItTooltip("rust.linter.on-the-fly.got.it", text, this)
-//            .withShowCount(1)
+            .withShowCount(1000)
             .withHeader(headerText)
             .withLink("Configure...") {
                 ShowSettingsUtil.getInstance().showSettingsDialog(project, RsExternalLinterConfigurable::class.java, null)

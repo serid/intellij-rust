@@ -5,11 +5,12 @@
 
 package org.rust.ide.annotator
 
-import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.MessageType
+import com.intellij.openapi.wm.WindowManager
 import org.rust.cargo.project.settings.rustSettings
-import org.rust.ide.actions.CargoEditSettingsAction
 import org.rust.ide.notifications.showBalloon
+import org.rust.ide.status.RsExternalLinterWidget
 import java.util.*
 
 interface RsLongExternalLinterRunNotifier {
@@ -32,13 +33,9 @@ class RsLongExternalLinterRunNotifierImpl(val project: Project) : RsLongExternal
 
         val minPrevDuration = prevDurations.minOrNull() ?: 0
         if (prevDurations.size == MAX_QUEUE_SIZE && minPrevDuration > maxDuration) {
-            project.showBalloon(
-                "Low Performance due External Linter",
-                "The IDE is running external linter on the fly and this might affect performance. " +
-                    "Please consider disabling or increasing the maximum duration of the external linter run.",
-                NotificationType.WARNING,
-                CargoEditSettingsAction("Configure")
-            )
+            val statusBar = WindowManager.getInstance().getStatusBar(project) ?: return
+            val widget = statusBar.getWidget(RsExternalLinterWidget.ID) as? RsExternalLinterWidget ?: return
+            widget.showBalloon("Low performance due to Rust external linter", MessageType.WARNING, project)
         }
     }
 

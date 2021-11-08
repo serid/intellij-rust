@@ -1006,7 +1006,7 @@
 
         <statusBarWidgetFactory id="rustExternalLinterWidget"
                                 implementation="org.rust.ide.status.RsExternalLinterWidgetFactory"
-                                order="after codeStyleWidget, before notificationsWidget"/>
+                                order="first"/> <!-- TODO -->
 
         <additionalLibraryRootsProvider
                 implementation="org.rust.cargo.project.workspace.RsAdditionalLibraryRootsProvider"/>

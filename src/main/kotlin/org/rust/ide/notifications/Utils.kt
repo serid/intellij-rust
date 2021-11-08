@@ -11,10 +11,20 @@ import com.intellij.ide.impl.isTrusted
 import com.intellij.notification.NotificationListener
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.AnAction
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.MessageType
+import com.intellij.openapi.ui.popup.Balloon
+import com.intellij.openapi.ui.popup.JBPopupFactory
+import com.intellij.openapi.util.NlsContexts
 import com.intellij.openapi.wm.WindowManager
+import com.intellij.ui.awt.RelativePoint
 import org.rust.RsBundle
+import java.awt.Component
+import java.awt.Point
+import kotlin.math.min
 
 fun Project.showBalloon(content: String, type: NotificationType, action: AnAction? = null) {
     showBalloon("", content, type, action)
@@ -37,6 +47,26 @@ fun Project.showBalloon(
 fun showBalloonWithoutProject(content: String, type: NotificationType) {
     val notification = RsNotifications.pluginNotifications().createNotification(content, type)
     Notifications.Bus.notify(notification)
+}
+
+fun Component.showBalloon(message: String, type: MessageType?, disposable: Disposable?) {
+    val popupFactory = JBPopupFactory.getInstance() ?: return
+    val balloonBuilder = popupFactory.createHtmlTextBalloonBuilder(message, type, null)
+    balloonBuilder.setDisposable(disposable ?: ApplicationManager.getApplication())
+    val balloon = balloonBuilder.createBalloon()
+    val x: Int
+    val y: Int
+    val position: Balloon.Position
+    if (size == null) {
+        y = 0
+        x = y
+        position = Balloon.Position.above
+    } else {
+        x = size.width / 2
+        y = 0
+        position = Balloon.Position.above
+    }
+    balloon.show(RelativePoint(this, Point(x, y)), position)
 }
 
 fun Project.setStatusBarText(text: String) {

@@ -31,6 +31,7 @@ import org.rust.ide.newProject.RsCustomTemplate
 import org.rust.ide.newProject.RsGenericTemplate
 import org.rust.ide.newProject.RsProjectTemplate
 import org.rust.ide.newProject.state.RsUserTemplatesState
+import org.rust.ide.notifications.showBalloon
 import org.rust.openapiext.UiDebouncer
 import javax.swing.DefaultListModel
 import javax.swing.JList
@@ -115,13 +116,7 @@ class RsNewProjectPanel(
 
             override fun onSuccess() {
                 if (exitCode != 0) {
-                    PopupUtil.showBalloonForComponent(
-                        templateList,
-                        "Failed to install cargo-generate",
-                        MessageType.ERROR,
-                        true,
-                        this@RsNewProjectPanel
-                    )
+                    templateList.showBalloon("Failed to install cargo-generate", MessageType.ERROR, this@RsNewProjectPanel)
                 }
 
                 update()
